@@ -1,0 +1,1 @@
+let age = 25; //age -> identifier, 25 ->  literal value

@@ -5,4 +5,3 @@ null: null is an assignment value that represents the intentional absence of any
 */
 
 let profilePicture = null;
-console
