@@ -11,7 +11,8 @@ A structured journey through JavaScript fundamentals, building toward Playwright
 | **02 — JS Basics** | JavaScript fundamentals | — |
 | **03 — Identifiers** | Variable naming rules, comments | `03_Identifier_Rules.js`, `04_Identifier_Rules_Part2.js`, `05_Comments.js`, `06_Identifier_IQ.js` |
 | **04 — Literals** | Values, null vs undefined | `07_Literal.js`, `08_null_undefined.js`, `09_Null_IQ.js` |
-| **05 — Operators** | Arithmetic, comparison, logical, confusing operators | `13_DataTypes.js`, `15_Comparison_operator.js`, `16_Logical_Operators.js`, `17_Confusing_Operator.js` |
+| **05 — Operators** | Arithmetic, comparison, logical, confusing, increment/decrement, null coalescing | `13_DataTypes.js`, `15_Comparison_operator.js`, `16_Logical_Operators.js`, `17_Confusing_Operator.js`, `18_In_De_Operator.js`, `19_Ad_In_Operator.js`, `20_Decrement_operator.js`, `21_Null_Coalescing.js` |
+| **06 — Statement** | IQ review on statements | `22_IQ.js` |
 | **IQ_Notes** | Concept breakdowns (tables, diagrams, takeaways) | `Source_Code_ByteCODE_Binary_IQ.md`, `__prompt.md` |
 
 ## 🎯 Goal
