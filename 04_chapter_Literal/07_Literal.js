@@ -3,7 +3,7 @@ let isStudent = true;
 let pi = 3.14;
 let name = 'Khaleeda';
 let nullValue = null;
-let undefinedValue = undefined;//variable declared but not assigned a value
+let undefinedValue;//variable declared but not assigned a value
 
 //typeof operator - it will tell you the type of the variable
 console.log(typeof age); // string  

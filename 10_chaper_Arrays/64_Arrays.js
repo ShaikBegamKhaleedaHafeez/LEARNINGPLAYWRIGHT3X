@@ -6,7 +6,6 @@ console.log("Total browsers: " + browsers.length);
 console.log(browsers[-1]);//undefined
 console.log(browsers.at(0));//chrome
 
-let arr = [10,20,30,40];
 
 let arr = [10,20,30,40];
 console.log("Number of elements in arr: " + arr.length);
