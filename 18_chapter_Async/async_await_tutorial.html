@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Async: Callbacks, Promises & Async/Await — Tutorial</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #4ade80;
+    --red: #f87171;
+    --yellow: #facc15;
+    --purple: #c084fc;
+    --code-bg: #0b1120;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 2.2rem; margin-bottom: 0.3rem; }
+  h1 .badge {
+    font-size: 0.9rem; background: var(--purple); color: #0b1120;
+    padding: 0.2rem 0.7rem; border-radius: 999px; vertical-align: middle;
+  }
+  .subtitle { color: var(--muted); margin-bottom: 2rem; }
+  h2 {
+    font-size: 1.5rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border); color: var(--accent);
+  }
+  h3 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; color: var(--yellow); }
+  p { margin-bottom: 1rem; }
+  ul, ol { margin: 0 0 1rem 1.5rem; }
+  li { margin-bottom: 0.4rem; }
+  a { color: var(--accent); }
+  .highlight {
+    background: var(--panel); border-left: 4px solid var(--accent);
+    padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+  }
+  .highlight.green { border-left-color: var(--green); }
+  .highlight.red { border-left-color: var(--red); }
+  .highlight.yellow { border-left-color: var(--yellow); }
+  .highlight.purple { border-left-color: var(--purple); }
+  .highlight strong { color: var(--accent); }
+  .highlight.green strong { color: var(--green); }
+  .highlight.red strong { color: var(--red); }
+  .highlight.yellow strong { color: var(--yellow); }
+  .highlight.purple strong { color: var(--purple); }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.2rem; overflow-x: auto;
+    margin: 0.8rem 0 1.2rem; font-size: 0.9rem;
+  }
+  code {
+    font-family: 'Cascadia Code', Consolas, monospace;
+    background: var(--code-bg); padding: 0.15rem 0.4rem;
+    border-radius: 4px; font-size: 0.9em;
+  }
+  pre code { background: none; padding: 0; }
+  .kw { color: var(--purple); }
+  .fn { color: var(--accent); }
+  .str { color: var(--green); }
+  .num { color: var(--yellow); }
+  .cmt { color: var(--muted); font-style: italic; }
+  .output {
+    background: #022c22; border: 1px solid #064e3b; color: #6ee7b7;
+    border-radius: 8px; padding: 0.8rem 1.2rem; margin: 0.4rem 0 1.2rem;
+    font-family: 'Cascadia Code', Consolas, monospace; font-size: 0.85rem;
+    white-space: pre-wrap;
+  }
+  .output::before { content: '▼ Console output'; display: block; color: #34d399; font-weight: bold; margin-bottom: 0.4rem; }
+  .run {
+    background: var(--accent); color: #0b1120; border: none;
+    padding: 0.5rem 1.2rem; border-radius: 6px; cursor: pointer;
+    font-weight: bold; margin: 0.5rem 0 1rem;
+  }
+  .run:hover { background: #7dd3fc; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0 1.5rem; }
+  th, td { border: 1px solid var(--border); padding: 0.6rem 0.9rem; text-align: left; }
+  th { background: var(--panel); color: var(--accent); }
+  tr:nth-child(even) td { background: rgba(148,163,184,0.05); }
+  .toc { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.6rem; }
+  .toc ol { margin-bottom: 0; }
+  .toc a { text-decoration: none; }
+  .footnote { color: var(--muted); font-size: 0.85rem; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Async JavaScript <span class="badge">Tutorial</span></h1>
+<p class="subtitle">Callbacks → Promises → async/await — mastering asynchronous code with <code>Promise.all</code>, <code>Promise.race</code>, and more.</p>
+
+<nav class="toc">
+  <strong>Table of Contents</strong>
+  <ol>
+    <li><a href="#why">Why do we need async code?</a></li>
+    <li><a href="#callbacks">Callbacks — the old way</a></li>
+    <li><a href="#promise">The Promise object — <code>new Promise()</code></a></li>
+    <li><a href="#then-catch">.then(), .catch(), .finally()</a></li>
+    <li><a href="#chaining">Promise chaining</a></li>
+    <li><a href="#async-await">async / await — the modern way</a></li>
+    <li><a href="#promise-all">Promise.all — run in parallel</a></li>
+    <li><a href="#promise-race">Promise.race — first to finish</a></li>
+    <li><a href="#allsettled">Promise.allSettled — wait for everyone</a></li>
+    <li><a href="#summary">Quick reference &amp; summary</a></li>
+  </ol>
+</nav>
+
+<!-- ============================ 1. WHY ============================ -->
+<h2 id="why">1. Why do we need async code?</h2>
+<p>
+JavaScript is <strong>single-threaded</strong> — it runs one piece of code at a time.
+But real-world apps do slow things: network calls, database queries, reading files, timers.
+If the browser waited for each one to finish, the whole page would freeze.
+</p>
+<div class="highlight yellow">
+  <strong>Asynchronous code</strong> lets JavaScript start a slow task, keep running other code, and
+  come back to handle the result <em>later</em> — without blocking the page.
+</div>
+<p>Think of a restaurant:</p>
+<ul>
+  <li><strong>Synchronous</strong> = the waiter stands at the kitchen until your pizza is ready. Nobody else gets served.</li>
+  <li><strong>Asynchronous</strong> = the waiter takes your order, serves other tables, and the kitchen calls out <em>"Pizza ready!"</em> when it's done.</li>
+</ul>
+<p>Three eras of handling that "call me back later" behaviour:</p>
+<table>
+  <tr><th>Era</th><th>Tool</th><th>Readability</th></tr>
+  <tr><td>Old</td><td>Callbacks</td><td>Callback hell 😵</td></tr>
+  <tr><td>Modern</td><td>Promises</td><td>Chained, flat-ish 👍</td></tr>
+  <tr><td>Modern</td><td>async / await</td><td>Looks synchronous 😍</td></tr>
+</table>
+
+<!-- ============================ 2. CALLBACKS ============================ -->
+<h2 id="callbacks">2. Callbacks — the old way</h2>
+<p>
+A <strong>callback</strong> is simply a function passed into another function, to be called later.
+</p>
+<pre><code><span class="kw">function</span> <span class="fn">fetchData</span>(callback) {
+  <span class="cmt">// Simulate a slow network request</span>
+  setTimeout(() =&gt; {
+    callback(<span class="str">"User data received"</span>);
+  }, 1000);
+}
+
+<span class="fn">fetchData</span>(message =&gt; {
+  console.log(message);
+});</code></pre>
+<div class="output">User data received</div>
+<div class="highlight red">
+  <strong>Callback hell:</strong> when callbacks are nested inside callbacks, the code
+  starts growing to the right — hard to read, hard to debug:
+</div>
+<pre><code><span class="fn">openBrowser</span>(() =&gt; {
+  <span class="fn">goToLogin</span>(() =&gt; {
+    <span class="fn">enterCredentials</span>(() =&gt; {
+      <span class="fn">clickLogin</span>(() =&gt; {
+        console.log(<span class="str">"Logged in!"</span>); <span class="cmt">// 🥴 deep nesting</span>
+      });
+    });
+  });
+});</code></pre>
+
+<!-- ============================ 3. NEW PROMISE ============================ -->
+<h2 id="promise">3. The Promise object — <code>new Promise()</code></h2>
+<p>
+A <strong>Promise</strong> is an object that represents a value that isn't available yet,
+but <em>will be</em> — either successfully or with an error. It has three states:
+</p>
+<ul>
+  <li><span style="color:var(--muted)"><strong>pending</strong></span> — work in progress (initial state)</li>
+  <li><span style="color:var(--green)"><strong>fulfilled</strong></span> — success, result is available</li>
+  <li><span style="color:var(--red)"><strong>rejected</strong></span> — failed, an error/reason is available</li>
+</ul>
+<p>The constructor takes a function with two parameters, <code>resolve</code> and <code>reject</code>:</p>
+<pre><code><span class="kw">let</span> order = <span class="kw">new</span> <span class="fn">Promise</span>((resolve, reject) =&gt; {
+  <span class="kw">let</span> foodReady = <span class="kw">true</span>;
+  <span class="kw">if</span> (foodReady) {
+    resolve(<span class="str">"Pizza is delivered!"</span>);  <span class="cmt">// -> .then()</span>
+  } <span class="kw">else</span> {
+    reject(<span class="str">"Order Cancelled"</span>);      <span class="cmt">// -> .catch()</span>
+  }
+});</code></pre>
+<div class="highlight">
+  <strong>Rule of thumb:</strong> call <code>resolve(value)</code> on success, <code>reject(error)</code> on failure.
+  Only <em>one</em> of them wins — the first call decides the state.
+</div>
+
+<!-- ============================ 4. THEN / CATCH / FINALLY ============================ -->
+<h2 id="then-catch">4. .then(), .catch(), .finally()</h2>
+<p>Consume a promise with three chained methods:</p>
+<table>
+  <tr><th>Method</th><th>Runs when…</th><th>Gets</th></tr>
+  <tr><td><code>.then()</code></td><td>fulfilled</td><td>the resolved value</td></tr>
+  <tr><td><code>.catch()</code></td><td>rejected</td><td>the error reason</td></tr>
+  <tr><td><code>.finally()</code></td><td>always (either way)</td><td>nothing — cleanup only</td></tr>
+</table>
+<pre><code>apiCall
+  .then(response =&gt; console.log(response))   <span class="cmt">// success path</span>
+  .catch(error =&gt; console.log(error))        <span class="cmt">// failure path</span>
+  .finally(() =&gt; console.log(<span class="str">"Done anyhow!"</span>)); <span class="cmt">// always runs</span></code></pre>
+<div class="output">User data
+Done anyhow!</div>
+<div class="highlight green">
+  <strong>💡 Test-automation analogy:</strong> <code>finally()</code> is like a teardown step —
+  close the browser or clear test data whether the test passed or failed.
+</div>
+
+<!-- ============================ 5. CHAINING ============================ -->
+<h2 id="chaining">5. Promise chaining</h2>
+<p>
+Each <code>.then()</code> returns a new promise, so you can chain steps — and each step
+receives the previous step's <em>returned</em> value. Perfect for sequential flows like a login journey:
+</p>
+<pre><code><span class="kw">function</span> <span class="fn">openBrowser</span>() {
+  <span class="kw">return new</span> <span class="fn">Promise</span>(resolve =&gt; resolve(<span class="str">"Browser is opened!"</span>));
+}
+<span class="kw">function</span> <span class="fn">goToLogin</span>() {
+  <span class="kw">return new</span> <span class="fn">Promise</span>(resolve =&gt; resolve(<span class="str">"Login Page is opened"</span>));
+}
+
+<span class="fn">openBrowser</span>()
+  .then(msg =&gt; { console.log(<span class="str">"Step 1"</span>, msg); <span class="kw">return</span> <span class="fn">goToLogin</span>(); })
+  .then(msg =&gt; console.log(<span class="str">"Step 2"</span>, msg))
+  .catch(err =&gt; console.log(<span class="str">"Error:"</span>, err))
+  .finally(() =&gt; console.log(<span class="str">"Execution is done"</span>));</code></pre>
+<div class="output">Step 1 Browser is opened!
+Step 2 Login Page is opened
+Execution is done</div>
+<div class="highlight yellow">
+  <strong>Key point:</strong> you <em>must</em> <code>return</code> the next promise inside <code>.then()</code>
+  to keep the chain alive. One <code>.catch()</code> at the end catches errors from any step.
+</div>
+
+<!-- ============================ 6. ASYNC / AWAIT ============================ -->
+<h2 id="async-await">6. async / await — the modern way</h2>
+<p>
+<code>async</code> marks a function as asynchronous (it always returns a Promise).
+<code>await</code> pauses the function until a promise settles, then gives you the value directly.
+The same login flow becomes nearly synchronous-looking:
+</p>
+<pre><code><span class="kw">async function</span> <span class="fn">loginFlow</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> step1 = <span class="kw">await</span> <span class="fn">openBrowser</span>();     <span class="cmt">// pauses here</span>
+    <span class="kw">const</span> step2 = <span class="kw">await</span> <span class="fn">goToLogin</span>();
+    console.log(step1, <span class="str">"→"</span>, step2);
+  } <span class="kw">catch</span> (err) {
+    console.log(<span class="str">"Error:"</span>, err);   <span class="cmt">// like .catch()</span>
+  } <span class="kw">finally</span> {
+    console.log(<span class="str">"Execution is done"</span>); <span class="cmt">// like .finally()</span>
+  }
+}
+<span class="fn">loginFlow</span>();</code></pre>
+<div class="output">Browser is opened! → Login Page is opened
+Execution is done</div>
+<div class="highlight green">
+  <strong>Best practice:</strong> always wrap <code>await</code> in <code>try / catch / finally</code> —
+  an unhandled rejected promise inside an async function becomes an uncaught error.
+</div>
+<div class="highlight">
+  <strong>🚦 <code>await</code> only works inside <code>async</code> functions</strong> (or top-level modules).
+  And note: <code>await</code> pauses <em>that function only</em> — the rest of the program keeps running.
+</div>
+
+<!-- ============================ 7. PROMISE.ALL ============================ -->
+<h2 id="promise-all">7. Promise.all — run in parallel, wait for all</h2>
+<p>
+When tasks are <strong>independent</strong>, don't run them one after another — launch them all
+at once and wait for every one to finish. <code>Promise.all</code> takes an array of promises:
+</p>
+<pre><code><span class="kw">const</span> checkAuth   = <span class="fn">Promise.resolve</span>(<span class="str">"Auth OK"</span>);
+<span class="kw">const</span> checkDB     = <span class="fn">Promise.resolve</span>(<span class="str">"DB OK"</span>);
+<span class="kw">const</span> checkCache  = <span class="fn">Promise.resolve</span>(<span class="str">"Cache OK"</span>);
+
+<span class="fn">Promise.all</span>([checkAuth, checkDB, checkCache])
+  .then(results =&gt; console.log(<span class="str">"All checks"</span>, results))
+  .catch(error =&gt; console.log(<span class="str">"error:"</span>, error));</code></pre>
+<div class="output">All checks [ 'Auth OK', 'DB OK', 'Cache OK' ]</div>
+<table>
+  <tr><th>Promise.all</th><th>Behaviour</th></tr>
+  <tr><td><strong>All fulfill</strong></td><td>→ array of results, in the same order as the input</td></tr>
+  <tr><td><strong>One rejects</strong></td><td>→ immediately rejects with <em>that</em> error ("fail fast"); other results are ignored</td></tr>
+</table>
+<pre><code><span class="kw">const</span> checkDB = <span class="fn">Promise.reject</span>(<span class="str">"DB Down"</span>);
+<span class="fn">Promise.all</span>([checkAuth, checkDB, checkCache])
+  .then(results =&gt; console.log(<span class="str">"All checks"</span>, results))
+  .catch(error =&gt; console.log(<span class="str">"error:"</span>, error));</code></pre>
+<div class="output">error: DB Down</div>
+<div class="highlight yellow">
+  <strong>💡 Test-automation analogy:</strong> run multiple independent API health checks in parallel —
+  but if one is down, the whole suite fails fast.
+</div>
+
+<!-- ============================ 8. PROMISE.RACE ============================ -->
+<h2 id="promise-race">8. Promise.race — first to settle wins</h2>
+<p>
+<code>Promise.race</code> also takes an array, but settles as soon as the <strong>first</strong> promise
+settles (fulfilled <em>or</em> rejected) — it doesn't wait for the rest.
+</p>
+<pre><code><span class="kw">let</span> fastServer = <span class="kw">new</span> <span class="fn">Promise</span>(resolve =&gt; {
+  setTimeout(() =&gt; resolve(<span class="str">"Fast 100ms"</span>), 100);
+});
+<span class="kw">let</span> slowServer = <span class="kw">new</span> <span class="fn">Promise</span>(resolve =&gt; {
+  setTimeout(() =&gt; resolve(<span class="str">"Slow 500ms"</span>), 500);
+});
+
+<span class="fn">Promise.race</span>([fastServer, slowServer])
+  .then(winner =&gt; console.log(<span class="str">"Winner:"</span>, winner));</code></pre>
+<div class="output">Winner: Fast 100ms</div>
+<div class="highlight purple">
+  <strong>💡 Real-world use:</strong> <strong>timeouts</strong> — race a real request against a timer that rejects,
+  so a hanging API call can't freeze your app:
+</div>
+<pre><code><span class="kw">const</span> timeout = <span class="kw">new</span> <span class="fn">Promise</span>((_, reject) =&gt;
+  setTimeout(() =&gt; reject(<span class="kw">new</span> <span class="fn">Error</span>(<span class="str">"Request timed out"</span>)), 5000)
+);
+<span class="fn">Promise.race</span>([<span class="fn">fetch</span>(url), timeout]);</code></pre>
+
+<!-- ============================ 9. ALLSETTLED ============================ -->
+<h2 id="allsettled">9. Promise.allSettled — wait for everyone, succeed or fail</h2>
+<p>
+Unlike <code>all</code>, <code>allSettled</code> never short-circuits. It waits for <em>every</em>
+promise to settle and reports each one's outcome — perfect when you want results even if some fail
+(e.g., running a test suite where failures are expected and reported, not fatal):
+</p>
+<pre><code><span class="fn">Promise.allSettled</span>([
+  <span class="fn">Promise.resolve</span>(<span class="str">"Test A Passed"</span>),
+  <span class="fn">Promise.reject</span>(<span class="str">"Test B Failed"</span>),
+  <span class="fn">Promise.resolve</span>(<span class="str">"Test C Passed"</span>)
+]).then(results =&gt; {
+  results.forEach((r, i) =&gt; {
+    console.log(<span class="str">"Test"</span>, (i + 1) + <span class="str">":"</span>, r.status, <span class="str">"-"</span>, r.value || r.reason);
+  });
+});</code></pre>
+<div class="output">Test 1 : fulfilled  -  Test A Passed
+Test 2 : rejected  -  Test B Failed
+Test 3 : fulfilled  -  Test C Passed</div>
+
+<!-- ============================ 10. SUMMARY ============================ -->
+<h2 id="summary">10. Quick reference &amp; summary</h2>
+<table>
+  <tr><th>Tool</th><th>When to use</th><th>Settles when</th></tr>
+  <tr><td><code>callback</code></td><td>Simple single-result callbacks (timers, events)</td><td>—</td></tr>
+  <tr><td><code>new Promise()</code></td><td>Wrap a slow/async operation with resolve/reject</td><td>resolve() or reject() called</td></tr>
+  <tr><td><code>.then/.catch/.finally</code></td><td>Consume a promise step by step</td><td>—</td></tr>
+  <tr><td><code>async/await</code></td><td>Readable sequential async code; pairs with try/catch</td><td>—</td></tr>
+  <tr><td><code>Promise.all</code></td><td>Parallel independent tasks, all must succeed</td><td>All fulfill / first rejection</td></tr>
+  <tr><td><code>Promise.race</code></td><td>Fastest result wins; timeouts</td><td>First to settle</td></tr>
+  <tr><td><code>Promise.allSettled</code></td><td>Run everything, collect pass + fail results</td><td>All settle (never fails)</td></tr>
+</table>
+
+<div class="highlight green">
+  <strong>Mental model:</strong>
+  <ol style="margin-top:0.5rem;">
+    <li><strong>Callback</strong> = "call me when you're done."</li>
+    <li><strong>Promise</strong> = a ticket that says "I'll be fulfilled or rejected later."</li>
+    <li><strong>async/await</strong> = sugar on top of promises, so code reads top-to-bottom.</li>
+    <li><strong>all / race / allSettled</strong> = combine multiple promises: wait for all, first, or everyone.</li>
+  </ol>
+</div>
+
+<p class="footnote">
+Built for the Playwright learning journey — complements the example files in
+<code>17_Promises</code> (136–143) and <code>18_chapter_Async</code>. Open this file in any browser
+to read; the code samples are ready to copy into <code>node file.js</code>.
+</p>
+
+</div>
+</body>
+</html>

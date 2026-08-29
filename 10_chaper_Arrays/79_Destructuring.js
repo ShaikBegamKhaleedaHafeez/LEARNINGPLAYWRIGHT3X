@@ -11,3 +11,4 @@ console.log(rest)
 //default values are used only when the slots are undefined
 let [x=1,y=2,z=99]=[10,20]
 console.log(x,y,z)
+

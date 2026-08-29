@@ -1,4 +1,4 @@
-function greetByName(name){
+function greetByName(name){ 
     console.log(`Hi ${name}`)
 }
 let c = greetByName("Khaleeda")

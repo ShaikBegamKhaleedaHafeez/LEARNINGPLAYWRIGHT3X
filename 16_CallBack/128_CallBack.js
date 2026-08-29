@@ -18,3 +18,4 @@ placeOrder("Burger", function(){
 placeOrder("Burger", ()=>{
     console.log("Arrow function, I'm function without name")
 })
+

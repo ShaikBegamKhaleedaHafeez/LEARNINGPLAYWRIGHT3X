@@ -1,9 +1,11 @@
-let apiCall = new Promise(function(resolve, reject){
-    resolve({status: 200, body : "User data"});
-});
+// let apiCall = new Promise(function(resolve, reject){
+//     resolve({status: 200, body : "User data"});
+// });
 
-apiCall.then(function(response){
-    console.log(response)
-    console.log(response.status);
-    console.log(response.body)
-});
+// apiCall.then(function(response){
+//     console.log(response)
+//     console.log(response.status);
+//     console.log(response.body)
+// });
+
+//.catch() - handling errrs
